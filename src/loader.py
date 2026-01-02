@@ -25,10 +25,36 @@ def load_rfp_documents(config: dict):
         json_path = os.path.join(json_folder, json_file_name)
         
         # --- [안전한 타입 변환 로직] ---
-        try:
-            budget_val = float(row.get('사업 금액', 0))
-        except:
-            budget_val = 0.0
+        def parse_budget(value):
+            if pd.isna(value) or value == '': return 0.0
+            s = str(value).replace(',', '').strip()
+            if not s: return 0.0
+            
+            try:
+                # 단순 숫자
+                return float(s)
+            except ValueError:
+                # "3억원", "3.5억원" 처리
+                if '억원' in s:
+                    try:
+                        val = float(s.replace('억원', ''))
+                        return val * 100_000_000
+                    except: pass
+                # "3000만원" 처리
+                if '천만원' in s:  # "3천만원" -> 30,000,000
+                    try: 
+                        val = float(s.replace('천만원', ''))
+                        return val * 10_000_000
+                    except: pass
+                if '만원' in s:    # "3000만원" -> 30,000,000 (위에서 걸러지지 않은 경우)
+                    try: 
+                        val = float(s.replace('만원', ''))
+                        return val * 10_000
+                    except: pass
+                    
+                return 0.0
+
+        budget_val = parse_budget(row.get('사업 금액', 0))
 
         # 공고 차수: 1.0 -> 1 로 변환
         try:
@@ -66,7 +92,11 @@ def load_rfp_documents(config: dict):
                         page_metadata = base_metadata.copy()
                         page_metadata['page'] = page_num
                         
-                        all_docs.append(Document(page_content=content, metadata=page_metadata))
+                        # [Context Injection] Prepend Organization and Project Name
+                        context_header = f"[{page_metadata.get('organization', 'Unknown')}] {page_metadata.get('project_name', 'Unknown')}\n"
+                        full_content = context_header + content
+                        
+                        all_docs.append(Document(page_content=full_content, metadata=page_metadata))
                 
                 success_count += 1
                 loaded = True

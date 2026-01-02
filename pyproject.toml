@@ -10,8 +10,12 @@ dependencies = [
     "langchain-community>=0.4.1",
     "langchain-openai>=1.1.6",
     "langchain-teddynote>=0.5.4",
+    "langchain-upstage>=0.7.5",
     "pandas>=2.3.3",
-    "pypdf>=6.5.0",
+    "pymupdf>=1.26.7",
+    "pypdf<5.0.0",
     "python-dotenv>=1.2.1",
     "pywin32>=311",
+    "PyYAML>=6.0",
+    "rank-bm25>=0.2.2",
 ]

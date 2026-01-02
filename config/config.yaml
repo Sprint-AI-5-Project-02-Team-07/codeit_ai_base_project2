@@ -5,8 +5,10 @@ model:
 
 process:
   chunk_size: 1000
-  chunk_overlap: 200 # Updated based on earlier chunker.py changes
-  retrieval_k: 30
+  chunk_overlap: 200
+  retrieval_k: 50       # 1단계: 의미 검색 후보 수
+  final_k: 10           # 2단계: 리랭킹 후 최종 결과 수
+  rerank_weight: 0.7    # BM25 점수 가중치 (0.0 ~ 1.0) - 키워드 매칭 중요도 상향
 
 path:
   csv_file: "data/data_list.csv"
