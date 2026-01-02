@@ -1,0 +1,21 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# 환경 변수 및 API 키
+.env
+
+# data
+data/files
+data/raw
+\[AI] 중급 프로젝트 가이드.txt
+
+# Vector Database
+vector_db/
