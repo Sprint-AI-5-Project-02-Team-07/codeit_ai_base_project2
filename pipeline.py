@@ -56,6 +56,13 @@ def main():
         # Ensure folders exist
         Path(config['path']['clean_json']).mkdir(parents=True, exist_ok=True)
         
+        # [Reset] Delete existing DB for clean build
+        import shutil
+        db_path = config['path']['vector_db']
+        if os.path.exists(db_path):
+            print(f"[Info] Deleting existing Vector DB at {db_path}...")
+            shutil.rmtree(db_path)
+        
         # Load docs using refactored loader
         docs = load_rfp_documents(config)
         
