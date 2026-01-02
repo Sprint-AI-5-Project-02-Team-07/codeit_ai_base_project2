@@ -1,7 +1,5 @@
 import yaml
-import os
 from dotenv import load_dotenv
-from langchain_core.messages import HumanMessage, AIMessage
 from src.indexer import load_vector_db
 from src.retriever import get_advanced_retriever
 from src.generator import create_bidmate_chain
