@@ -7,7 +7,7 @@ from tqdm.asyncio import tqdm_asyncio
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnableConfig
+
 
 from src.indexer import load_vector_db
 from src.retriever import get_advanced_retriever
