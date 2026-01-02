@@ -14,7 +14,7 @@ wheels/
 
 # data
 data/files
-data/raw
+data/raw_data
 \[AI] 중급 프로젝트 가이드.txt
 
 # Vector Database

@@ -4,8 +4,9 @@ model:
   temperature: 0
 
 process:
-  chunk_size: 3000
-  chunk_overlap: 500
+  chunk_size: 1000
+  chunk_overlap: 200 # Updated based on earlier chunker.py changes
+  retrieval_k: 30
 
 path:
   csv_file: "data/data_list.csv"

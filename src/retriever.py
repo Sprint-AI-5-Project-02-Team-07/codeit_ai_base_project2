@@ -27,8 +27,10 @@ def get_advanced_retriever(vectorstore, config):
     def create_chroma_filter(search_query: SearchQuery):
         filters = []
         
-        if search_query.organization:
-            filters.append({"organization": {"$eq": search_query.organization}})
+        # [변경] 기관명 필터 제거 (유저 질의와 DB 메타데이터 간 정확한 일치가 어려워 검색 누락 발생)
+        # if search_query.organization:
+        #     filters.append({"organization": {"$eq": search_query.organization}})
+
         if search_query.min_budget is not None:
             filters.append({"budget": {"$gte": search_query.min_budget}})
         if search_query.max_budget is not None:
@@ -56,8 +58,9 @@ def get_advanced_retriever(vectorstore, config):
         print(f" - 검색어: '{inputs.query}'")
         print(f" - 필터: {chroma_filter}")
         
+        k_val = config.get('process', {}).get('retrieval_k', 30)
         return vectorstore.similarity_search(
-            inputs.query, k=3, filter=chroma_filter
+            inputs.query, k=k_val, filter=chroma_filter
         )
 
     return llm | RunnableLambda(retriever_func)
