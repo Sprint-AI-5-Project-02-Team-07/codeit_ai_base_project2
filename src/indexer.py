@@ -2,9 +2,23 @@ import os
 from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_huggingface import HuggingFaceEmbeddings
+
+def get_embeddings(config):
+    # Scenario A: Local Embeddings (GCP)
+    scenario = config.get('scenario', 'B')
+    if scenario == "A":
+        return HuggingFaceEmbeddings(
+            model_name="intfloat/multilingual-e5-large",
+            model_kwargs={'device': 'cuda' if scenario == "A" else 'cpu'}, 
+            encode_kwargs={'normalize_embeddings': True}
+        )
+    # Scenario B: OpenAI Embeddings (Default)
+    else:
+        return OpenAIEmbeddings(model=config['model']['embedding'])
 
 def build_vector_db(docs, config):
-    embeddings = OpenAIEmbeddings(model=config['model']['embedding'])
+    embeddings = get_embeddings(config)
     db_path = config['path']['vector_db']
 
     # DB 구축 (Batch processing with progress bar)
@@ -26,7 +40,7 @@ def build_vector_db(docs, config):
     return vectorstore
 
 def load_vector_db(config):
-    embeddings = OpenAIEmbeddings(model=config['model']['embedding'])
+    embeddings = get_embeddings(config)
     db_path = config['path']['vector_db']
     
     if not os.path.exists(db_path):

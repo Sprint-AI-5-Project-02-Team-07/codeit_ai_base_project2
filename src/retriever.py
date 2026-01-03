@@ -25,10 +25,22 @@ class SearchQuery(BaseModel):
     pub_date_after: Optional[str] = Field(None, description="이 날짜 이후에 공개된 사업 (YYYY-MM-DD)")
 
 def get_advanced_retriever(vectorstore, config):
-    llm = ChatOpenAI(
-        model=config['model']['llm'], 
-        temperature=0
-    ).with_structured_output(SearchQuery)
+    scenario = config.get('scenario', 'B')
+    
+    if scenario == "A":
+        llm = ChatOpenAI(
+            model="google/gemma-2-9b-it",
+            base_url="http://localhost:8000/v1",
+            api_key="EMPTY",
+            temperature=0
+        )
+    else:
+        llm = ChatOpenAI(
+            model=config['model']['llm'], 
+            temperature=0
+        )
+        
+    llm = llm.with_structured_output(SearchQuery)
 
     def create_chroma_filter(search_query: SearchQuery):
         filters = []

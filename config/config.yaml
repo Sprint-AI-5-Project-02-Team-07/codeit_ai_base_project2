@@ -1,3 +1,4 @@
+scenario: "B" # "A" for Local/GCP, "B" for API
 model:
   llm: "gpt-5-mini"
   embedding: "text-embedding-3-small"

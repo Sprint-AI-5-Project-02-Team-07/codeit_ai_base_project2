@@ -37,9 +37,24 @@ async def process_file(file_path, chain, semaphore):
             # print(f"Skipping {file_path}: {e}")
             return None
 
+import yaml
+
+# Load Config
+with open('config/config.yaml', 'r', encoding='utf-8') as f:
+    config = yaml.safe_load(f)
+
 async def generate_qa_dataset_async():
     # 1. Setup LLM (Async)
-    llm = ChatOpenAI(model="gpt-5-mini", temperature=0.7)
+    scenario = config.get('scenario', 'B')
+    if scenario == "A":
+        llm = ChatOpenAI(
+            model="google/gemma-2-9b-it",
+            base_url="http://localhost:8000/v1",
+            api_key="EMPTY",
+            temperature=0.7
+        )
+    else:
+        llm = ChatOpenAI(model=config['model']['llm'], temperature=0.7)
     
     prompt = ChatPromptTemplate.from_template("""
     You are an expert at creating RAG evaluation datasets from technical Request for Proposals (RFP) documents.
