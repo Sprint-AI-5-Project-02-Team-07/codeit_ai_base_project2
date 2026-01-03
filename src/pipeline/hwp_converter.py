@@ -1,12 +1,19 @@
 from glob import glob
 import os
-import win32com.client as win32
+try:
+    import win32com.client as win32
+except ImportError:
+    win32 = None
 from pathlib import Path
 
 def run_hwp_conversion(input_dir: str):
     """
     Convert all .hwp files in input_dir to .pdf
     """
+    if win32 is None:
+        print("[Error] win32com is not available. This feature works only on Windows.")
+        return
+
     input_path = Path(input_dir)
     
     if not input_path.exists():
