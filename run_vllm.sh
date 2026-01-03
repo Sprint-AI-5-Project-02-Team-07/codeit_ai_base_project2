@@ -10,4 +10,4 @@ echo "Ensure you have GPU enabled and 'vllm' installed."
 # Run vLLM serving
 # --dtype auto: Auto-detect float16/bfloat16
 # --api-key EMPTY: No key required for local access
-uv run vllm serve $MODEL --dtype auto --api-key EMPTY --port 32000
+uv run vllm serve $MODEL --dtype auto --api-key EMPTY --port 32000 --quantization fp8 --max-model-len 40000
