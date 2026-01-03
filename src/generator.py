@@ -27,7 +27,7 @@ def create_bidmate_chain(retriever, config):
         # vLLM Server (GCP)
         llm = ChatOpenAI(
             model="google/gemma-2-9b-it",
-            base_url="http://localhost:8000/v1",
+            base_url="http://localhost:8001/v1",
             api_key="EMPTY",
             temperature=config['model']['temperature']
         )
